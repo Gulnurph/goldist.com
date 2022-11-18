@@ -1,0 +1,248 @@
+       [HttpGet]
+        public string LogoutNo()
+        {
+            var caution = "Alışveriş sepetinizde ürünleriniz var.Lütfen siparişlerini onaylayınız!!!";
+            //  var musteri = UserSession.User;
+            var result = _geciciSiparisService.CartList(HttpContext.Session.GetObject<MUSTERI>("Login")).Result.Data.GeciciSiparisList;
+            if (result.Count != 0)
+            {
+                return caution;
+            }
+            else
+            {
+                return ""; 
+            }
+        }
+        [Route("adres")]
+        public async Task<IActionResult> MyAdress()
+        {
+            var user = HttpContext.Session.GetObject<MUSTERI>("Login");
+            var model =await _musteriDetayService.GetByCari(user.CARIKODU);
+            
+            return View(model.Data.Musteriler);
+        }
+        
+        [Route("hesap")]
+        public ActionResult MyAccount()
+        {
+            var user = HttpContext.Session.GetObject<MUSTERI>("Login");
+            return View(user);
+        }
+
+        [HttpPost]
+        [Route("hesap")]
+        public async Task<IActionResult> MyAccount(MUSTERI musteri,string YENISIFRE,string YENISIFRETEKRAR)
+        {
+            var user = HttpContext.Session.GetObject<MUSTERI>("Login");
+            if (YENISIFRE == YENISIFRETEKRAR)
+            {
+
+                musteri.CARIKODU = user.CARIKODU;
+                musteri.CARIGOSTER = user.CARIGOSTER;
+                musteri.CARIPERSONEL = user.CARIPERSONEL;
+                musteri.DOVIZ = user.DOVIZ;
+                musteri.FAKS = user.FAKS;
+                musteri.WEB = user.WEB;
+                if (YENISIFRE!=null)
+                {
+                    musteri.WEBSIFRE = YENISIFRE;
+                }
+                var MusteriUpdateDto = _mapper.Map<MusteriUpdateDto>(musteri);
+                await _musteriService.Update(MusteriUpdateDto);
+                HttpContext.Session.Remove("Login");
+                HttpContext.Session.SetObject("Login", musteri);
+                if (TempData["ProfilChanged"] != null)
+                {
+                    TempData.Remove("ProfilChanged");
+                }
+                TempData.Add("ProfilChanged", "Bilgileriniz Başarıyla Güncellendi ");
+                return RedirectToAction("ShoppingComplate", "Order");
+            }
+            else if (YENISIFRE != YENISIFRETEKRAR)
+            {
+                TempData.Add("ProfilChanged", "Girdiğiniz Şifreler Aynı Olmalıdır.");
+                return RedirectToAction("MyAccount", user);
+            }
+            else
+            {
+                return NotFound();
+            }
+   
+        }
+
+        [HttpPost]
+        [Route("hesap-sifre")]
+        public async Task<IActionResult> MyPassword(MUSTERI musteri,string YENISIFRE,string YENISIFRETEKRAR)
+        {
+            var user = HttpContext.Session.GetObject<MUSTERI>("Login");
+            if (YENISIFRE==YENISIFRETEKRAR)
+            {
+                
+                musteri.CARIKODU = user.CARIKODU;
+                musteri.CARIGOSTER = user.CARIGOSTER;
+                musteri.CARIPERSONEL = user.CARIPERSONEL;
+                musteri.DOVIZ = user.DOVIZ;
+                musteri.FAKS = user.FAKS;
+                musteri.TEL1 = user.TEL1;
+                musteri.WEB = user.WEB;
+                musteri.WEBSIFRE = YENISIFRE;
+                var MusteriUpdateDto = _mapper.Map<MusteriUpdateDto>(musteri);
+                await _musteriService.Update(MusteriUpdateDto);
+                HttpContext.Session.Remove("Login");
+                HttpContext.Session.SetObject("Login", musteri);
+                if (TempData["ProfilChanged"] != null)
+                {
+                    TempData.Remove("ProfilChanged");
+                }
+                TempData.Add("ProfilChanged", "Şifreniz Başarıyla Değiştirildi ");
+                return RedirectToAction("ShoppingComplate", "Order");
+            }
+            else if (YENISIFRE != YENISIFRETEKRAR)
+            {
+                TempData.Add("ProfilChanged", "Girdiğiniz Şifreler Aynı Olmalıdır.");
+                return RedirectToAction("MyAccount", user);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [Route("uyelik")]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("uyelik")]
+        public async Task<IActionResult> Register(RegisterModel register)
+            {
+            var url = new Uri($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{Request.Path}");
+            ViewData["Url"] = url;
+            var musteriler =await _musteriService.GetAll();
+            if (ModelState.IsValid)
+            {
+
+                TempData.Remove("DenyRegister");
+                if (musteriler.Data.Musteris.Any(m => m.WEBMAIL == register.WEBMAIL))
+                {
+                    TempData.Add("DenyRegister", $"Merhaba {register.AD}, hesabınız zaten mevcut");
+                    return View();
+                }
+
+                var xref =await _referansService.GetAll();
+                var islemsayisi = xref.Data.Referanses.Where(x => x.TARIH.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")).ToList().Count() + 1;
+
+                var tarih2 = DateTime.Now.ToString("yyMMdd");
+                var carikod = tarih2 + islemsayisi.ToString();
+                var yeniReferans = new REFERANS
+                {
+                    REFNO = carikod,
+                    FISNO = islemsayisi,
+                    TARIH = DateTime.Now,
+                    USERID = "B2C USER",
+                    DEPARTMAN = "B2C",
+                    ACIKLAMA = "ONLINE ACCOUNT",
+
+                };
+
+                if (register.EBULTEN)
+                {
+                    var musteriEkle = new MUSTERI
+                    {
+                        CARIKODU = carikod,
+                        YETKILI = register.YETKILI,
+                        KISAUNVAN = register.AD +" "+register.SOYAD,
+                        ILCE = register.ILCE,
+                        SEHIR = register.SEHIR,
+                        EYALET = register.EYALET,
+                        ULKE = register.ULKE,
+                        TESLIM = register.TESLIM,
+                        TEL1 = register.TEL1,
+                       // B2CMAIL = register.WEBMAIL,
+                        WEBSIFRE = register.WEBSIFRE,
+                        CARIPERSONEL = "",
+                        CARIPERSONELKISAUNVAN = "",
+                        DOVIZ = "",
+                        VERGINO = register.VERGINO,
+                        VERGIDAIRESI = register.VERGIDAIRESI,
+                        CARIGOSTER = "N",
+                        B2BACIK = "N",
+                        KATAGORI = "B2C MÜSTERI",
+                      //  EBULTEN="Y"
+                        //EMAIL=register.WEBMAIL
+                        
+                    };
+                   await _referansService.Add(yeniReferans);
+                   await _musteriService.Add(musteriEkle);
+
+                    var parametre =await _parametreService.Get();
+                    //var url = Request.Url.Host;
+                    string firmamail = $"<b>Cari kodu {musteriEkle.CARIKODU} olan  {musteriEkle.KISAUNVAN}  kayıt olmuştur";
+                 /*  await _parametreService.SendEmailAsync(new MailRequest() {Body= firmamail,ToEmail= musteriEkle.B2CMAIL,Subject= "B2C NEW ACCOUNT",Name=musteriEkle.KISAUNVAN });*/
+                }
+                else
+                {
+
+                var musteriEkle = new MUSTERI
+                {
+                    CARIKODU = carikod,
+                    YETKILI = register.YETKILI,
+                    KISAUNVAN = register.AD + " " + register.SOYAD,
+                    ILCE = register.ILCE,
+                    SEHIR = register.SEHIR,
+                    EYALET = register.EYALET,
+                    ULKE = register.ULKE,
+                    TESLIM = register.TESLIM,
+                    TEL1 = register.TEL1,
+                    WEBMAIL = register.WEBMAIL,
+                    WEBSIFRE = register.WEBSIFRE,
+                    CARIPERSONEL = "",
+                    CARIPERSONELKISAUNVAN = "",
+                    DOVIZ = "",
+                    VERGINO = register.VERGINO,
+                    VERGIDAIRESI = register.VERGIDAIRESI,
+                    CARIGOSTER = "N",
+                    B2BACIK = "N",
+                    KATAGORI = "B2C MÜSTERI",
+
+                };
+                   await _referansService.Add(yeniReferans);
+                   await _musteriService.Add(musteriEkle);
+                
+                    var parametre =await _parametreService.Get();
+                    string firmamail = $"<b>Cari kodu {musteriEkle.CARIKODU} olan  {musteriEkle.KISAUNVAN} Goldist'e  kayıt olmustur.";
+                 /*  await _parametreService.SendEmailAsync(new MailRequest() { Body = firmamail, ToEmail = musteriEkle.B2CMAIL, Subject = "B2C NEW ACCOUNT", Name = musteriEkle.KISAUNVAN });*/
+                }
+                var musteriDetay = new MUSTERIDETAY
+                {
+                    CARIKODU = carikod,
+                    KISAUNVAN = register.AD + " " + register.SOYAD,
+                    ILCE = register.ILCE,
+                    SEHIR = register.SEHIR,
+                    EYALET = register.EYALET,
+                    ULKE = register.ULKE,
+                    TEL1 = register.TEL1,
+                    EMAIL = register.WEBMAIL,
+                    ADR1 = register.TESLIM,
+                    KATAGORI = "ADRES"
+                };
+               await _musteriDetayService.Add(musteriDetay);
+
+                TempData.Add("InfoRegister", $"Merhaba {register.AD+" "+register.SOYAD} Kaydınız Başarıyla Oluşturuldu.Giriş Yapabilirsiniz");
+
+                ModelState.Clear();
+
+                return RedirectToAction("Index", "Home");
+            }
+
+
+            return View();
+        }
+        [HttpGet]
+        [Route("sifremiunuttum")]
+        public ActionResult ForgotThePassword()
+        {
+            return View();
+        }
