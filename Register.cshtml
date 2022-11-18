@@ -1,0 +1,743 @@
+﻿@model GoldistUI.Models.Account.RegisterModel
+@{
+    ViewData["Title"] = "Hemen Üye Ol & Kayıt | Goldist";
+    ViewData["Descption"] = "Goldist'te yaptığınız alışverişleri takip etmek için hemen üye olun!";
+    ViewData["noindex"] = true;
+}
+
+@*@section css{
+        <style>
+
+
+            /* Full-width input fields */
+            .panel-body .form-group input[type=text], input[type=password], input[type=email], input[type=number] {
+                width: 100%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 2px solid #bfa0cc;
+                box-sizing: border-box;
+            }
+        </style>
+        <style>
+            .form-control {
+                border: 2px solid #F6B6AB !important;
+            }
+        </style>
+        <link href="~/Template/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    }*@
+<style>
+    .text-danger {
+        position: absolute;
+    }
+</style>
+
+@*<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>*@
+<!------ Include the above in your HEAD tag ---------->
+@*<header>
+        <div class="header container">
+            <div class="row">
+
+                <div class="header-top-link">
+                    <br /><br />
+                    <div class="header-logo text-ce">
+
+                        <div id="logo"><a href="~/Home/Index"> <img src="~/Images/Logo/cosar-logo.png" title="Cosar Silver" alt="Your Store" class="img-brand"></a></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>*@
+@*<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>*@
+<div class="container" style="-webkit-box-shadow:none;margin-top:5px">
+    <div id="breadcrumb">
+        <ol class="breadcrumb mblbrdcrmp" style="margin-top:10px">
+            <li><a class="colorbrdcrmp" asp-action="Index" asp-controller="Home">Ana Sayfa</a></li>
+
+            <li><a class="colorbrdcrmp" href="">Üye ol</a></li>
+            @*<li><a asp-action="Gemstone2" asp-controller="UrunMamul" asp-route-id="@Url.SeoFriendlyUrl(Model.Urunmamul.TUR)" asp-route-altKategori="@Url.SeoFriendlyUrl(Model.Urunmamul.GRUP11)">@Model.Urunmamul.GRUP11</a></li>*@
+            @*<li>@Model.Urunmamul.WEB1_ACIKLAMA</li>*@
+        </ol>
+    </div>
+</div>
+<div class="container bordernot" style="-webkit-box-shadow:none;border:0.25px solid #959595;padding:50px;margin-top:-10px">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="form-group" style="-webkit-box-shadow:none">
+                <span style="border:none;font-size:20px;margin-left: 15px;">
+                    <b>Üye Ol</b>
+                </span>
+
+                @if (TempData["error"] != null)
+                {
+                    <div class="validation-summary-errors text-center" role="alert" style="color: red;background-color: #F6B6AB"><b>@TempData["error"]</b></div>
+                }
+                @if (TempData["shoppingComplete"] != null)
+                {
+                    <div class="validation-summary-errors" role="alert" style="color: red;background-color: #F6B6AB">@TempData["shoppingComplete"]</div>
+                }
+                @if (TempData["IfSuccessfull"] != null)
+                {
+                    <div class="validation-summary-errors" role="alert" style="color:lawngreen;background-color: #F6B6AB">@TempData["IfSuccessfull"]</div>
+                }
+                <form method="post" role="form">
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>Ad Soyad*</label>
+                        <input type="text" class="form-control" name="AD" placeholder="" style="border:0.25px solid #959595" />
+                        @*@Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "şifreniz", type = "Email", style = "border:1px solid #black !importent", required = "required" })*@
+                        @Html.ValidationMessageFor(model => model.AD, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>Soyad*</label>
+                        <input type="text" class="form-control" name="SOYAD" placeholder="" style="border:0.25px solid #959595" />
+                        @*@Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "şifreniz", type = "Email", style = "border:1px solid #black !importent", required = "required" })*@
+                        @Html.ValidationMessageFor(model => model.SOYAD, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>İl*</label>
+                        @*<input type="text" class="form-control" name="TESLIM" placeholder="" style="border:0.25px solid #959595" required />*@
+                        @*@Html.DropDownListFor(model => model.ILCE, new SelectList(Model.cities), new { @class = "form-control", style = "border:1px solid #black !importent", required = "required" })*@
+                        <select id="city" onchange="city(this)" asp-for="SEHIR" class="form-control" style="border:0.25px solid #959595">
+                            <option value="0">------</option>
+                            <option value="İstanbul">İstanbul</option>
+                            <option value="Ankara">Ankara</option>
+                            <option value="İzmir">İzmir</option>
+                            <option value="Adana">Adana</option>
+                            <option value="Adıyaman">Adıyaman</option>
+                            <option value="Afyonkarahisar">Afyonkarahisar</option>
+                            <option value="Ağrı">Ağrı</option>
+                            <option value="Aksaray">Aksaray</option>
+                            <option value="Amasya">Amasya</option>
+                            <option value="Antalya">Antalya</option>
+                            <option value="Ardahan">Ardahan</option>
+                            <option value="Artvin">Artvin</option>
+                            <option value="Aydın">Aydın</option>
+                            <option value="Balıkesir">Balıkesir</option>
+                            <option value="Bartın">Bartın</option>
+                            <option value="Batman">Batman</option>
+                            <option value="Bayburt">Bayburt</option>
+                            <option value="Bilecik">Bilecik</option>
+                            <option value="Bingöl">Bingöl</option>
+                            <option value="Bitlis">Bitlis</option>
+                            <option value="Bolu">Bolu</option>
+                            <option value="Burdur">Burdur</option>
+                            <option value="Bursa">Bursa</option>
+                            <option value="Çanakkale">Çanakkale</option>
+                            <option value="Çankırı">Çankırı</option>
+                            <option value="Çorum">Çorum</option>
+                            <option value="Denizli">Denizli</option>
+                            <option value="Diyarbakır">Diyarbakır</option>
+                            <option value="Düzce">Düzce</option>
+                            <option value="Edirne">Edirne</option>
+                            <option value="Elazığ">Elazığ</option>
+                            <option value="Erzincan">Erzincan</option>
+                            <option value="Erzurum">Erzurum</option>
+                            <option value="Eskişehir">Eskişehir</option>
+                            <option value="Gaziantep">Gaziantep</option>
+                            <option value="Giresun">Giresun</option>
+                            <option value="Gümüşhane">Gümüşhane</option>
+                            <option value="Hakkari">Hakkari</option>
+                            <option value="Hatay">Hatay</option>
+                            <option value="Iğdır">Iğdır</option>
+                            <option value="Isparta">Isparta</option>
+                            <option value="Kahramanmaraş">Kahramanmaraş</option>
+                            <option value="Karabük">Karabük</option>
+                            <option value="Karaman">Karaman</option>
+                            <option value="Kars">Kars</option>
+                            <option value="Kastamonu">Kastamonu</option>
+                            <option value="Kayseri">Kayseri</option>
+                            <option value="Kırıkkale">Kırıkkale</option>
+                            <option value="Kırklareli">Kırklareli</option>
+                            <option value="Kırşehir">Kırşehir</option>
+                            <option value="Kilis">Kilis</option>
+                            <option value="Kocaeli">Kocaeli</option>
+                            <option value="Konya">Konya</option>
+                            <option value="Kütahya">Kütahya</option>
+                            <option value="Malatya">Malatya</option>
+                            <option value="Manisa">Manisa</option>
+                            <option value="Mardin">Mardin</option>
+                            <option value="Mersin">Mersin</option>
+                            <option value="Muğla">Muğla</option>
+                            <option value="Muş">Muş</option>
+                            <option value="Nevşehir">Nevşehir</option>
+                            <option value="Niğde">Niğde</option>
+                            <option value="Ordu">Ordu</option>
+                            <option value="Osmaniye">Osmaniye</option>
+                            <option value="Rize">Rize</option>
+                            <option value="Sakarya">Sakarya</option>
+                            <option value="Samsun">Samsun</option>
+                            <option value="Siirt">Siirt</option>
+                            <option value="Sinop">Sinop</option>
+                            <option value="Sivas">Sivas</option>
+                            <option value="Şırnak">Şırnak</option>
+                            <option value="Tekirdağ">Tekirdağ</option>
+                            <option value="Tokat">Tokat</option>
+                            <option value="Trabzon">Trabzon</option>
+                            <option value="Tunceli">Tunceli</option>
+                            <option value="Şanlıurfa">Şanlıurfa</option>
+                            <option value="Uşak">Uşak</option>
+                            <option value="Van">Van</option>
+                            <option value="Yalova">Yalova</option>
+                            <option value="Yozgat">Yozgat</option>
+                            <option value="Zonguldak">Zonguldak</option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.SEHIR, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>İlçe*</label>
+                        @*<input type="text" class="form-control" name="TESLIM" placeholder="" style="border:0.25px solid #959595" required />*@
+                        @*@Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "şifreniz", type = "Email", style = "border:1px solid #black !importent", required = "required" })*@
+                        <select id="district" asp-for="ILCE" class="form-control" style="border:0.25px solid #959595">
+                        </select>
+                        @Html.ValidationMessageFor(model => model.ILCE, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>Adres*</label>
+                        <input type="text" class="form-control" name="TESLIM" placeholder="" style="border:0.25px solid #959595" />
+                        @*@Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "şifreniz", type = "Email", style = "border:1px solid #black !importent", required = "required" })*@
+                        @Html.ValidationMessageFor(model => model.TESLIM, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>Telefon*</label>
+                        <input type="text" class="form-control" name="TEL1" placeholder="" style="border:0.25px solid #959595" />
+                        @*@Html.TextBoxFor(model => model.TEL1, new { @class = "form-control", style = "border:1px solid #black !important", required = "required" })*@
+                        @Html.ValidationMessageFor(model => model.TEL1, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>E-Posta*</label>
+                        <input type="email" class="form-control" name="WEBMAIL" placeholder="" style="border:0.25px solid #959595" />
+                        @*@Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "şifreniz", type = "Email", style = "border:1px solid #black !importent", required = "required" })*@
+                        @Html.ValidationMessageFor(model => model.WEBMAIL, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>T.C. No/Vergi No</label>
+                        <input type="text" class="form-control" name="VERGINO" placeholder="" style="border:0.25px solid #959595" />
+                        @*@Html.TextBoxFor(model => model.TEL1, new { @class = "form-control", style = "border:1px solid #black !important", required = "required" })*@
+                        @*@Html.ValidationMessageFor(model => model.TEL1, "", new { @class = "text-danger" })*@
+
+                    </div>
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>Vergi Dairesi</label>
+                        <input type="text" class="form-control" name="VERGIDAIRESI" placeholder="" style="border:0.25px solid #959595" />
+                        @*@Html.TextBoxFor(model => model.TEL1, new { @class = "form-control", style = "border:1px solid #black !important", required = "required" })*@
+                        @*@Html.ValidationMessageFor(model => model.TEL1, "", new { @class = "text-danger" })*@
+
+                    </div>
+
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>Şifre*</label>
+                        <input type="password" class="form-control" name="WEBSIFRE" placeholder="" style="border:0.25px solid #959595" />
+                        @*@Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "şifreniz", type = "Email", style = "border:1px solid #black !importent", required = "required" })*@
+                        @Html.ValidationMessageFor(model => model.WEBSIFRE, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="form-group mt-auto  col-sm-6">
+
+                        <label>Şifre Tekrarı*</label>
+                        <input type="password" class="form-control" name="REPASSWORD" placeholder="" style="border:0.25px solid #959595" />
+                        @*@Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "şifreniz", type = "Email", style = "border:1px solid #black !importent", required = "required" })*@
+                        @Html.ValidationMessageFor(model => model.REPASSWORD, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="form-group mt-auto col-sm-6">
+
+                    </div>
+
+                    <div class="form-group mt-auto col-sm-6">
+                        <label>E-bülten Üye olmak istermisiniz*</label>
+                        @*<input type="checkbox" class="form-control" name="EBULTEN" />*@
+                        @Html.CheckBoxFor(model => model.EBULTEN, new { style = "border:1px solid #black !important" })
+                        @*@Html.ValidationMessageFor(model => model.EBULTEN, "", new { @class = "text-danger" })*@
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4 mt-4">
+                            <button id="btnLogin" type="submit" class="btn" style="font-size: 15px; color: white; background-color: red; box-shadow: none !important; width: 100%; border-radius: 0; border-color: red">
+                                Üye Ol
+                            </button>
+                        </div>
+                        <div class="col-sm-4"></div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="~/js/ilce.js" type="text/javascript"></script>
+
+@*@section js{
+        <script type="text/javascript">
+            $('#city').change(function () {
+                var city = $('#city').val();
+                var item = "";
+                $("#district").empty();
+                if (city == 'Adana') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Aladağ', text: 'Aladağ' }), $('<option>', { value: 'Ceyhan', text: 'Ceyhan' }), $('<option>', { value: 'Çukurova', text: 'Çukurova' }), $('<option>', { value: 'Feke', text: 'Feke' }), $('<option>', { value: 'İmamoğlu', text: 'İmamoğlu' }),
+                        $('<option>', { value: 'Karaisalı', text: 'Karaisalı' }), $('<option>', { value: 'Karataş', text: 'Karataş' }), $('<option>', { value: 'Kozan', text: 'Kozan' }), $('<option>', { value: 'Pozantı', text: 'Pozantı' }), $('<option>', { value: 'Saimbeyli', text: 'Saimbeyli' }),
+                        $('<option>', { value: 'Sarıçam', text: 'Sarıçam' }), $('<option>', { value: 'Seyhan', text: 'Seyhan' }), $('<option>', { value: 'Tufanbeyli', text: 'Tufanbeyli' }), $('<option>', { value: 'Yumurtalık', text: 'Yumurtalık' }), $('<option>', { value: 'Yüreğir', text: 'Yüreğir' })
+                    );
+                } else if (city == 'Adıyaman') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Besni', text: 'Besni' }), $('<option>', { value: 'Çelikhan', text: 'Çelikhan' }), $('<option>', { value: 'Gerger', text: 'Gerger' }), $('<option>', { value: 'Gölbaşı', text: 'Gölbaşı' }), $('<option>', { value: 'Kahta', text: 'Kahta' }),
+                        $('<option>', { value: 'Samsat', text: 'Samsat' }), $('<option>', { value: 'Sincik', text: 'Sincik' }), $('<option>', { value: 'Tut', text: 'Tut' })
+                    );
+                } else if (city == 'Afyonkarahisar') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Bayat', text: 'Bayat' }), $('<option>', { value: 'Bolvadin', text: 'Bolvadin' }), $('<option>', { value: 'Çay', text: 'Çay' }), $('<option>', { value: 'Çobanlar', text: 'Çobanlar' }), $('<option>', { value: 'Dazkırı', text: 'Dazkırı' }),
+                        $('<option>', { value: 'Dinar', text: 'Dinar' }), $('<option>', { value: 'Emirdağ', text: 'Emirdağ' }), $('<option>', { value: 'Evciler', text: 'Evciler' }), $('<option>', { value: 'Hocalar', text: 'Hocalar' }), $('<option>', { value: 'İhsaniye', text: 'İhsaniye' }),
+                        $('<option>', { value: 'İscehisar', text: 'İscehisar' }), $('<option>', { value: 'Kızılören', text: 'Kızılören' }), $('<option>', { value: 'Sandıklı', text: 'Sandıklı' }), $('<option>', { value: 'Sinanpaşa', text: 'Sinanpaşa' }), $('<option>', { value: 'Sultandağı', text: 'Sultandağı' }), $('<option>', { value: 'Şuhut', text: 'Şuhut' })
+                    );
+                }
+                else if (city == 'Ağrı') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Diyadin', text: 'Diyadin' }), $('<option>', { value: 'Doğubayazıt', text: 'Doğubayazıt' }), $('<option>', { value: 'Eleşkirt', text: 'Eleşkirt' }), $('<option>', { value: 'Hamur', text: 'Hamur' }), $('<option>', { value: 'Patnos', text: 'Patnos' }),
+                        $('<option>', { value: 'Taşlıçay', text: 'Taşlıçay' }), $('<option>', { value: 'Tutak', text: 'Tutak' })
+                    );
+                } else if (city == 'Amasya') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Gümüşhacıköy', text: 'Gümüşhacıköy' }), $('<option>', { value: 'Hamamözü', text: 'Hamamözü' }), $('<option>', { value: 'Merzifon', text: 'Merzifon' }), $('<option>', { value: 'Suluova', text: 'Suluova' }), $('<option>', { value: 'Taşova', text: 'Taşova' })
+                    );
+                } else if (city == 'Ankara') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Ayaş', text: 'Ayaş' }), $('<option>', { value: 'Bala', text: 'Bala' }), $('<option>', { value: 'Beypazarı', text: 'Beypazarı' }), $('<option>', { value: 'Çamlıdere', text: 'Çamlıdere' }), $('<option>', { value: 'Çankaya', text: 'Çankaya' }),
+                        $('<option>', { value: 'Çubuk', text: 'Çubuk' }), $('<option>', { value: 'Elmadağ', text: 'Elmadağ' }), $('<option>', { value: 'Güdül', text: 'Güdül' }), $('<option>', { value: 'Haymana', text: 'Haymana' }), $('<option>', { value: 'Kalecik', text: 'Kalecik' }),
+                        $('<option>', { value: 'Kızılcahamam', text: 'Kızılcahamam' }), $('<option>', { value: 'Nallıhan', text: 'Nallıhan' }), $('<option>', { value: 'Polatlı', text: 'Polatlı' }), $('<option>', { value: 'Şereflikoçhisar', text: 'Şereflikoçhisar' }), $('<option>', { value: 'Yenimahalle', text: 'Yenimahalle' }), $('<option>', { value: 'Gölbaşı', text: 'Gölbaşı' }), $('<option>', { value: 'Keçiören', text: 'Keçiören' }), $('<option>', { value: 'Mamak', text: 'Mamak' }), $('<option>', { value: 'Sincan', text: 'Sincan' }), $('<option>', { value: 'Kazan', text: 'Kazan' }), $('<option>', { value: 'Akyurt', text: 'Akyurt' }), $('<option>', { value: 'Etimesgut', text: 'Etimesgut' }), $('<option>', { value: 'Evren', text: 'Evren' }), $('<option>', { value: 'Pursaklar', text: 'Pursaklar' })
+                    );
+                } else if (city == 'Antalya') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Akseki', text: 'Akseki' }), $('<option>', { value: 'Alanya', text: 'Alanya' }), $('<option>', { value: 'Elmalı', text: 'Elmalı' }), $('<option>', { value: 'Finike', text: 'Finike' }), $('<option>', { value: 'Gazipaşa', text: 'Gazipaşa' }),
+                        $('<option>', { value: 'Gündoğmuş', text: 'Gündoğmuş' }), $('<option>', { value: 'Kaş', text: 'Kaş' }), $('<option>', { value: 'Korkuteli', text: 'Korkuteli' }), $('<option>', { value: 'Kumluca', text: 'Kumluca' }), $('<option>', { value: 'Manavgat', text: 'Manavgat' }),
+                        $('<option>', { value: 'Serik', text: 'Serik' }), $('<option>', { value: 'Demre', text: 'Demre' }), $('<option>', { value: 'İbradı', text: 'İbradı' }), $('<option>', { value: 'Kemer', text: 'Kemer' }), $('<option>', { value: 'Aksu', text: 'Aksu' }), $('<option>', { value: 'Döşemealtı', text: 'Döşemealtı' }), $('<option>', { value: 'Kepez', text: 'Kepez' }), $('<option>', { value: 'Konyaaltı', text: 'Konyaaltı' }), $('<option>', { value: 'Muratpaşa', text: 'Muratpaşa' })
+                    );
+                } else if (city == 'Artvin') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Arhavi', text: 'Arhavi' }), $('<option>', { value: 'Borçka', text: 'Borçka' }), $('<option>', { value: 'Hopa', text: 'Hopa' }), $('<option>', { value: 'Şavşat', text: 'Şavşat' }), $('<option>', { value: 'Yusufeli', text: 'Yusufeli' }),
+                        $('<option>', { value: 'Murgul', text: 'Murgul' })
+                    );
+                } else if (city == 'Aydın') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Bozdoğan', text: 'Bozdoğan' }), $('<option>', { value: 'Efeler', text: 'Efeler' }), $('<option>', { value: 'Çine', text: 'Çine' }), $('<option>', { value: 'Germencik', text: 'Germencik' }), $('<option>', { value: 'Karacasu', text: 'Karacasu' }),
+                        $('<option>', { value: 'Koçarlı', text: 'Koçarlı' }), $('<option>', { value: 'Kuşadası', text: 'Kuşadası' }), $('<option>', { value: 'Kuyucak', text: 'Kuyucak' }), $('<option>', { value: 'Nazilli', text: 'Nazilli' }), $('<option>', { value: 'Söke', text: 'Söke' }), $('<option>', { value: 'Sultanhisar', text: 'Sultanhisar' }), $('<option>', { value: 'Yenipazar', text: 'Yenipazar' }), $('<option>', { value: 'Buharkent', text: 'Buharkent' }), $('<option>', { value: 'İncirliova', text: 'İncirliova' }), $('<option>', { value: 'Karpuzlu', text: 'Karpuzlu' }), $('<option>', { value: 'Köşk', text: 'Köşk' }), $('<option>', { value: 'Didim', text: 'Didim' })
+                    );
+                } else if (city == 'Balıkesir') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Altıeylül', text: 'Altıeylül' }), $('<option>', { value: 'Ayvalık', text: 'Ayvalık' }), $('<option>', { value: 'Balya', text: 'Balya' }), $('<option>', { value: 'Bandırma', text: 'Bandırma' }), $('<option>', { value: 'Bigadiç', text: 'Bigadiç' }),
+                        $('<option>', { value: 'Burhaniye', text: 'Burhaniye' }), $('<option>', { value: 'Dursunbey', text: 'Dursunbey' }), $('<option>', { value: 'Edremit', text: 'Edremit' }), $('<option>', { value: 'Erdek', text: 'Erdek' }), $('<option>', { value: 'Gönen', text: 'Gönen' }), $('<option>', { value: 'Havran', text: 'Havran' }), $('<option>', { value: 'İvrindi', text: 'İvrindi' }), $('<option>', { value: 'Karesi', text: 'Karesi' }), $('<option>', { value: 'Kepsut', text: 'Kepsut' }), $('<option>', { value: 'Manyas', text: 'Manyas' }), $('<option>', { value: 'Savaştepe', text: 'Savaştepe' }), $('<option>', { value: 'Sındırgı', text: 'Sındırgı' }), $('<option>', { value: 'Gömeç', text: 'Gömeç' }), $('<option>', { value: 'Susurluk', text: 'Susurluk' }), $('<option>', { value: 'Marmara', text: 'Marmara' })
+                    );
+                } else if (city == 'Bilecik') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Bozüyük', text: 'Bozüyük' }), $('<option>', { value: 'Gölpazarı', text: 'Gölpazarı' }), $('<option>', { value: 'Osmaneli', text: 'Osmaneli' }), $('<option>', { value: 'Pazaryeri', text: 'Pazaryeri' }), $('<option>', { value: 'Söğüt', text: 'Söğüt' }), $('<option>', { value: 'Yenipazar', text: 'Yenipazar' }), $('<option>', { value: 'İnhisar', text: 'İnhisar' })
+                    );
+                } else if (city == 'Bingöl') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Genç', text: 'Genç' }), $('<option>', { value: 'Karlıova', text: 'Karlıova' }), $('<option>', { value: 'Kiğı', text: 'Kiğı' }), $('<option>', { value: 'Solhan', text: 'Solhan' }), $('<option>', { value: 'Adaklı', text: 'Adaklı' }), $('<option>', { value: 'Yayladere', text: 'Yayladere' }), $('<option>', { value: 'Yedisu', text: 'Yedisu' })
+                    );
+                } else if (city == 'Bitlis') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Adilcevaz', text: 'Adilcevaz' }), $('<option>', { value: 'Ahlat', text: 'Ahlat' }), $('<option>', { value: 'Hizan', text: 'Hizan' }), $('<option>', { value: 'Mutki', text: 'Mutki' }), $('<option>', { value: 'Tatvan', text: 'Tatvan' }), $('<option>', { value: 'Güroymak', text: 'Güroymak' })
+                    );
+                } else if (city == 'Bolu') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Gerede', text: 'Gerede' }), $('<option>', { value: 'Göynük', text: 'Göynük' }), $('<option>', { value: 'Kıbrıscık', text: 'Kıbrıscık' }), $('<option>', { value: 'Mengen', text: 'Mengen' }), $('<option>', { value: 'Mudurnu', text: 'Mudurnu' }), $('<option>', { value: 'Seben', text: 'Seben' }), $('<option>', { value: 'Dörtdivan', text: 'Dörtdivan' }), $('<option>', { value: 'Yeniçağa', text: 'Yeniçağa' })
+                    );
+                } else if (city == 'Burdur') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Ağlasun', text: 'Ağlasun' }), $('<option>', { value: 'Bucak', text: 'Bucak' }), $('<option>', { value: 'Gölhisar', text: 'Gölhisar' }), $('<option>', { value: 'Tefenni', text: 'Tefenni' }), $('<option>', { value: 'Yeşilova', text: 'Yeşilova' }), $('<option>', { value: 'Karamanlı', text: 'Karamanlı' }), $('<option>', { value: 'Kemer', text: 'Kemer' }), $('<option>', { value: 'Altınyayla', text: 'Altınyayla' }), $('<option>', { value: 'Çavdır', text: 'Çavdır' }), $('<option>', { value: 'Çeltikçi', text: 'Çeltikçi' })
+                    );
+                } else if (city == 'Bursa') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Gemlik', text: 'Gemlik' }), $('<option>', { value: 'İnegöl', text: 'İnegöl' }), $('<option>', { value: 'İznik', text: 'İznik' }), $('<option>', { value: 'Karacabey', text: 'Karacabey' }), $('<option>', { value: 'Keles', text: 'Keles' }), $('<option>', { value: 'Mudanya', text: 'Mudanya' }), $('<option>', { value: 'Mustafakemalpaşa', text: 'Mustafakemalpaşa' }), $('<option>', { value: 'Orhaneli', text: 'Orhaneli' }), $('<option>', { value: 'Orhangazi', text: 'Orhangazi' }), $('<option>', { value: 'Yenişehir', text: 'Yenişehir' }), $('<option>', { value: 'Büyükorhan', text: 'Büyükorhan' }), $('<option>', { value: 'Harmancık', text: 'Harmancık' }), $('<option>', { value: 'Nilüfer', text: 'Nilüfer' }), $('<option>', { value: 'Osmangazi', text: 'Osmangazi' }), $('<option>', { value: 'Yıldırım', text: 'Yıldırım' }), $('<option>', { value: 'Gürsu', text: 'Gürsu' }), $('<option>', { value: 'Kestel', text: 'Kestel' })
+                    );
+                } else if (city == 'Çanakkale') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Ayvacık', text: 'Ayvacık' }), $('<option>', { value: 'Bayramiç', text: 'Bayramiç' }), $('<option>', { value: 'Biga', text: 'Biga' }), $('<option>', { value: 'Bozcaada', text: 'Bozcaada' }), $('<option>', { value: 'Çan', text: 'Çan' }), $('<option>', { value: 'Eceabat', text: 'Eceabat' }), $('<option>', { value: 'Ezine', text: 'Ezine' }), $('<option>', { value: 'Gelibolu', text: 'Gelibolu' }), $('<option>', { value: 'Gökçeada', text: 'Gökçeada' }), $('<option>', { value: 'Lapseki', text: 'Lapseki' }), $('<option>', { value: 'Yenice', text: 'Yenice' })
+                    );
+                } else if (city == 'Çankırı') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Çerkeş', text: 'Çerkeş' }), $('<option>', { value: 'Eldivan', text: 'Eldivan' }), $('<option>', { value: 'Ilgaz', text: 'Ilgaz' }), $('<option>', { value: 'Kurşunlu', text: 'Kurşunlu' }), $('<option>', { value: 'Orta', text: 'Orta' }), $('<option>', { value: 'Şabanözü', text: 'Şabanözü' }), $('<option>', { value: 'Yapraklı', text: 'Yapraklı' }), $('<option>', { value: 'Atkaracalar', text: 'Atkaracalar' }), $('<option>', { value: 'Kızılırmak', text: 'Kızılırmak' }), $('<option>', { value: 'Bayramören', text: 'Bayramören' }), $('<option>', { value: 'Korgun', text: 'Korgun' })
+                    );
+                } else if (city == 'Çorum') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Alaca', text: 'Alaca' }), $('<option>', { value: 'Bayat', text: 'Bayat' }), $('<option>', { value: 'İskilip', text: 'İskilip' }), $('<option>', { value: 'Kargı', text: 'Kargı' }), $('<option>', { value: 'Mecitözü', text: 'Mecitözü' }), $('<option>', { value: 'Ortaköy', text: 'Ortaköy' }), $('<option>', { value: 'Osmancık', text: 'Osmancık' }), $('<option>', { value: 'Sungurlu', text: 'Sungurlu' }), $('<option>', { value: 'Boğazkale', text: 'Boğazkale' }), $('<option>', { value: 'Uğurludağ', text: 'Uğurludağ' }), $('<option>', { value: 'Dodurga', text: 'Dodurga' }), $('<option>', { value: 'Laçin', text: 'Laçin' }), $('<option>', { value: 'Oğuzlar', text: 'Oğuzlar' })
+                    );
+                } else if (city == 'Denizli') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Acıpayam', text: 'Acıpayam' }), $('<option>', { value: 'Çal', text: 'Çal' }), $('<option>', { value: 'Çameli', text: 'Çameli' }), $('<option>', { value: 'Çardak', text: 'Çardak' }), $('<option>', { value: 'Çivril', text: 'Çivril' }), $('<option>', { value: 'Merkezefendi', text: 'Merkezefendi' }), $('<option>', { value: 'Pamukkale', text: 'Pamukkale' }), $('<option>', { value: 'Güney', text: 'Güney' }), $('<option>', { value: 'Kale', text: 'Kale' }), $('<option>', { value: 'Sarayköy', text: 'Sarayköy' }), $('<option>', { value: 'Tavas', text: 'Tavas' }), $('<option>', { value: 'Babadağ', text: 'Babadağ' }), $('<option>', { value: 'Bekilli', text: 'Bekilli' }), $('<option>', { value: 'Honaz', text: 'Honaz' }), $('<option>', { value: 'Serinhisar', text: 'Serinhisar' }), $('<option>', { value: 'Baklan', text: 'Baklan' }), $('<option>', { value: 'Beyağaç', text: 'Beyağaç' }), $('<option>', { value: 'Bozkurt', text: 'Bozkurt' })
+                    );
+                } else if (city == 'Diyarbakır') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Kocaköy', text: 'Kocaköy' }), $('<option>', { value: 'Çermik', text: 'Çermik' }), $('<option>', { value: 'Çınar', text: 'Çınar' }), $('<option>', { value: 'Çüngüş', text: 'Çüngüş' }), $('<option>', { value: 'Dicle', text: 'Dicle' }), $('<option>', { value: 'Ergani', text: 'Ergani' }), $('<option>', { value: 'Hani', text: 'Hani' }), $('<option>', { value: 'Hazro', text: 'Hazro' }), $('<option>', { value: 'Kulp', text: 'Kulp' }), $('<option>', { value: 'Lice', text: 'Lice' }), $('<option>', { value: 'Silvan', text: 'Silvan' }), $('<option>', { value: 'Eğil', text: 'Eğil' }), $('<option>', { value: 'Bağlar', text: 'Bağlar' }), $('<option>', { value: 'Kayapınar', text: 'Kayapınar' }), $('<option>', { value: 'Sur', text: 'Sur' }), $('<option>', { value: 'Yenişehir', text: 'Yenişehir' }), $('<option>', { value: 'Bismil', text: 'Bismil' })
+                    );
+                } else if (city == 'Edirne') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Enez', text: 'Enez' }), $('<option>', { value: 'Havsa', text: 'Havsa' }), $('<option>', { value: 'İpsala', text: 'İpsala' }), $('<option>', { value: 'Keşan', text: 'Keşan' }), $('<option>', { value: 'Lalapaşa', text: 'Lalapaşa' }), $('<option>', { value: 'Meriç', text: 'Meriç' }), $('<option>', { value: 'Uzunköprü', text: 'Uzunköprü' }), $('<option>', { value: 'Süloğlu', text: 'Süloğlu' })
+                    );
+                } else if (city == 'Elazığ') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Ağın', text: 'Ağın' }), $('<option>', { value: 'Baskil', text: 'Baskil' }), $('<option>', { value: 'Keban', text: 'Keban' }), $('<option>', { value: 'Maden', text: 'Maden' }), $('<option>', { value: 'Palu', text: 'Palu' }), $('<option>', { value: 'Sivrice', text: 'Sivrice' }), $('<option>', { value: 'Arıcak', text: 'Arıcak' }), $('<option>', { value: 'Kovancılar', text: 'Kovancılar' }), $('<option>', { value: 'Alacakaya', text: 'Alacakaya' })
+                    );
+                } else if (city == 'Erzincan') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Çayırlı', text: 'Çayırlı' }), $('<option>', { value: 'İliç', text: 'İliç' }), $('<option>', { value: 'Kemah', text: 'Kemah' }), $('<option>', { value: 'Kemaliye', text: 'Kemaliye' }), $('<option>', { value: 'Refahiye', text: 'Refahiye' }), $('<option>', { value: 'Tercan', text: 'Tercan' }), $('<option>', { value: 'Üzümlü', text: 'Üzümlü' }), $('<option>', { value: 'Otlukbeli', text: 'Otlukbeli' })
+                    );
+                } else if (city == 'Erzurum') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Aşkale', text: 'Aşkale' }), $('<option>', { value: 'Çat', text: 'Çat' }), $('<option>', { value: 'Hınıs', text: 'Hınıs' }), $('<option>', { value: 'Horasan', text: 'Horasan' }), $('<option>', { value: 'İspir', text: 'İspir' }), $('<option>', { value: 'Karayazı', text: 'Karayazı' }), $('<option>', { value: 'Narman', text: 'Narman' }), $('<option>', { value: 'Oltu', text: 'Oltu' }), $('<option>', { value: 'Olur', text: 'Olur' }), $('<option>', { value: 'Pasinler', text: 'Pasinler' }), $('<option>', { value: 'Şenkaya', text: 'Şenkaya' }), $('<option>', { value: 'Tekman', text: 'Tekman' }), $('<option>', { value: 'Tortum', text: 'Tortum' }), $('<option>', { value: 'Karaçoban', text: 'Karaçoban' }), $('<option>', { value: 'Uzundere', text: 'Uzundere' }), $('<option>', { value: 'Pazaryolu', text: 'Pazaryolu' }), $('<option>', { value: 'Köprüköy', text: 'Köprüköy' }), $('<option>', { value: 'Palandöken', text: 'Palandöken' }), $('<option>', { value: 'Yakutiye', text: 'Yakutiye' }), $('<option>', { value: 'Aziziye', text: 'Aziziye' })
+                    );
+                } else if (city == 'Eskişehir') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Çifteler', text: 'Çifteler' }), $('<option>', { value: 'Mahmudiye', text: 'Mahmudiye' }), $('<option>', { value: 'Mihalıççık', text: 'Mihalıççık' }), $('<option>', { value: 'Sarıcakaya', text: 'Sarıcakaya' }), $('<option>', { value: 'Seyitgazi', text: 'Seyitgazi' }), $('<option>', { value: 'Sivrihisar', text: 'Sivrihisar' }), $('<option>', { value: 'Alpu', text: 'Alpu' }), $('<option>', { value: 'Beylikova', text: 'Beylikova' }), $('<option>', { value: 'İnönü', text: 'İnönü' }), $('<option>', { value: 'Günyüzü', text: 'Günyüzü' }), $('<option>', { value: 'Han', text: 'Han' }), $('<option>', { value: 'Mihalgazi', text: 'Mihalgazi' }), $('<option>', { value: 'Odunpazarı', text: 'Odunpazarı' }), $('<option>', { value: 'Tepebaşı', text: 'Tepebaşı' })
+                    );
+                } else if (city == 'Gaziantep') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Araban', text: 'Araban' }), $('<option>', { value: 'İslahiye', text: 'İslahiye' }), $('<option>', { value: 'Nizip', text: 'Nizip' }), $('<option>', { value: 'Oğuzeli', text: 'Oğuzeli' }), $('<option>', { value: 'Yavuzeli', text: 'Yavuzeli' }), $('<option>', { value: 'Şahinbey', text: 'Şahinbey' }), $('<option>', { value: 'Şehitkamil', text: 'Şehitkamil' }), $('<option>', { value: 'Karkamış', text: 'Karkamış' }), $('<option>', { value: 'Nurdağı', text: 'Nurdağı' })
+                    );
+                } else if (city == 'Giresun') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Alucra', text: 'Alucra' }), $('<option>', { value: 'Bulancak', text: 'Bulancak' }), $('<option>', { value: 'Dereli', text: 'Dereli' }), $('<option>', { value: 'Espiye', text: 'Espiye' }), $('<option>', { value: 'Eynesil', text: 'Eynesil' }), $('<option>', { value: 'Görele', text: 'Görele' }), $('<option>', { value: 'Keşap', text: 'Keşap' }), $('<option>', { value: 'Şebinkarahisar', text: 'Şebinkarahisar' }), $('<option>', { value: 'Tirebolu', text: 'Tirebolu' }), $('<option>', { value: 'Piraziz', text: 'Piraziz' }), $('<option>', { value: 'Yağlıdere', text: 'Yağlıdere' }), $('<option>', { value: 'Çamoluk', text: 'Çamoluk' }), $('<option>', { value: 'Çanakçı', text: 'Çanakçı' }), $('<option>', { value: 'Doğankent', text: 'Doğankent' }), $('<option>', { value: 'Güce', text: 'Güce' })
+                    );
+                } else if (city == 'Gümüşhane') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Kelkit', text: 'Kelkit' }), $('<option>', { value: 'Şiran', text: 'Şiran' }), $('<option>', { value: 'Torul', text: 'Torul' }), $('<option>', { value: 'Köse', text: 'Köse' }), $('<option>', { value: 'Kürtün', text: 'Kürtün' })
+                    );
+                } else if (city == 'Hakkari') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Çukurca', text: 'Çukurca' }), $('<option>', { value: 'Şemdinli', text: 'Şemdinli' }), $('<option>', { value: 'Yüksekova', text: 'Yüksekova' })
+                    );
+                } else if (city == 'Hatay') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Altınözü', text: 'Altınözü' }), $('<option>', { value: 'Arsuz', text: 'Arsuz' }), $('<option>', { value: 'Defne', text: 'Defne' }), $('<option>', { value: 'Dörtyol', text: 'Dörtyol' }), $('<option>', { value: 'Hassa', text: 'Hassa' }), $('<option>', { value: 'Antakya', text: 'Antakya' }), $('<option>', { value: 'İskenderun', text: 'İskenderun' }), $('<option>', { value: 'Kırıkhan', text: 'Kırıkhan' }), $('<option>', { value: 'Payas', text: 'Payas' }), $('<option>', { value: 'Reyhanlı', text: 'Reyhanlı' }), $('<option>', { value: 'Samandağ', text: 'Samandağ' }), $('<option>', { value: 'Yayladağı', text: 'Yayladağı' }), $('<option>', { value: 'Erzin', text: 'Erzin' }), $('<option>', { value: 'Belen', text: 'Belen' }), $('<option>', { value: 'Kumlu', text: 'Kumlu' })
+                    );
+                } else if (city == 'Isparta') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Atabey', text: 'Atabey' }), $('<option>', { value: 'Eğirdir', text: 'Eğirdir' }), $('<option>', { value: 'Gelendost', text: 'Gelendost' }), $('<option>', { value: 'Keçiborlu', text: 'Keçiborlu' }), $('<option>', { value: 'Senirkent', text: 'Senirkent' }), $('<option>', { value: 'Sütçüler', text: 'Sütçüler' }), $('<option>', { value: 'Şarkikaraağaç', text: 'Şarkikaraağaç' }), $('<option>', { value: 'Uluborlu', text: 'Uluborlu' }), $('<option>', { value: 'Yalvaç', text: 'Yalvaç' }), $('<option>', { value: 'Aksu', text: 'Aksu' }), $('<option>', { value: 'Gönen', text: 'Gönen' }), $('<option>', { value: 'Yenişarbademli', text: 'Yenişarbademli' })
+                    );
+                } else if (city == 'Mersin') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Anamur', text: 'Anamur' }), $('<option>', { value: 'Erdemli', text: 'Erdemli' }), $('<option>', { value: 'Gülnar', text: 'Gülnar' }), $('<option>', { value: 'Mut', text: 'Mut' }), $('<option>', { value: 'Silifke', text: 'Silifke' }), $('<option>', { value: 'Tarsus', text: 'Tarsus' }), $('<option>', { value: 'Aydıncık', text: 'Aydıncık' }), $('<option>', { value: 'Bozyazı', text: 'Bozyazı' }), $('<option>', { value: 'Çamlıyayla', text: 'Çamlıyayla' }), $('<option>', { value: 'Akdeniz', text: 'Akdeniz' }), $('<option>', { value: 'Mezitli', text: 'Mezitli' }), $('<option>', { value: 'Toroslar', text: 'Toroslar' }), $('<option>', { value: 'Yenişehir', text: 'Yenişehir' })
+                    );
+                } else if (city == 'İstanbul') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Adalar', text: 'Adalar' }), $('<option>', { value: 'Beşiktaş', text: 'Beşiktaş' }), $('<option>', { value: 'Beykoz', text: 'Beykoz' }), $('<option>', { value: 'Beyoğlu', text: 'Beyoğlu' }), $('<option>', { value: 'Çatalca', text: 'Çatalca' }), $('<option>', { value: 'Eyüp', text: 'Eyüp' }), $('<option>', { value: 'Fatih', text: 'Fatih' }), $('<option>', { value: 'Gaziosmanpaşa', text: 'Gaziosmanpaşa' }), $('<option>', { value: 'Kadıköy', text: 'Kadıköy' }), $('<option>', { value: 'Kartal', text: 'Kartal' }), $('<option>', { value: 'Sarıyer', text: 'Sarıyer' }), $('<option>', { value: 'Silivri', text: 'Silivri' }), $('<option>', { value: 'Şile', text: 'Şile' }), $('<option>', { value: 'Şişli', text: 'Şişli' }), $('<option>', { value: 'Üsküdar', text: 'Üsküdar' }), $('<option>', { value: 'Zeytinburnu', text: 'Zeytinburnu' }), $('<option>', { value: 'Büyükçekmece', text: 'Büyükçekmece' }), $('<option>', { value: 'Kağıthane', text: 'Kağıthane' }), $('<option>', { value: 'Küçükçekmece', text: 'Küçükçekmece' }), $('<option>', { value: 'Pendik', text: 'Pendik' }), $('<option>', { value: 'Ümraniye', text: 'Ümraniye' }), $('<option>', { value: 'Bayrampaşa', text: 'Bayrampaşa' }), $('<option>', { value: 'Avcılar', text: 'Avcılar' }), $('<option>', { value: 'Bağcılar', text: 'Bağcılar' }), $('<option>', { value: 'Bahçelievler', text: 'Bahçelievler' }), $('<option>', { value: 'Güngören', text: 'Güngören' }), $('<option>', { value: 'Maltepe', text: 'Maltepe' }), $('<option>', { value: 'Sultanbeyli', text: 'Sultanbeyli' }), $('<option>', { value: 'Tuzla', text: 'Tuzla' }), $('<option>', { value: 'Esenler', text: 'Esenler' }), $('<option>', { value: 'Arnavutköy', text: 'Arnavutköy' }), $('<option>', { value: 'Ataşehir', text: 'Ataşehir' }), $('<option>', { value: 'Başakşehir', text: 'Başakşehir' }), $('<option>', { value: 'Beylikdüzü', text: 'Beylikdüzü' }), $('<option>', { value: 'Çekmeköy', text: 'Çekmeköy' }), $('<option>', { value: 'Esenyurt', text: 'Esenyurt' }), $('<option>', { value: 'Sancaktepe', text: 'Sancaktepe' }), $('<option>', { value: 'Sultangazi', text: 'Sultangazi' })
+                    );
+                } else if (city == 'İzmir') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Aliağa', text: 'Aliağa' }), $('<option>', { value: 'Bayındır', text: 'Bayındır' }), $('<option>', { value: 'Bergama', text: 'Bergama' }), $('<option>', { value: 'Bornova', text: 'Bornova' }), $('<option>', { value: 'Çeşme', text: 'Çeşme' }), $('<option>', { value: 'Dikili', text: 'Dikili' }), $('<option>', { value: 'Foça', text: 'Foça' }), $('<option>', { value: 'Karaburun', text: 'Karaburun' }), $('<option>', { value: 'Karşıyaka', text: 'Karşıyaka' }), $('<option>', { value: 'Kemalpaşa', text: 'Kemalpaşa' }), $('<option>', { value: 'Kınık', text: 'Kınık' }), $('<option>', { value: 'Kiraz', text: 'Kiraz' }), $('<option>', { value: 'Menemen', text: 'Menemen' }), $('<option>', { value: 'Ödemiş', text: 'Ödemiş' }), $('<option>', { value: 'Seferihisar', text: 'Seferihisar' }), $('<option>', { value: 'Selçuk', text: 'Selçuk' }), $('<option>', { value: 'Tire', text: 'Tire' }), $('<option>', { value: 'Torbalı', text: 'Torbalı' }), $('<option>', { value: 'Urla', text: 'Urla' }), $('<option>', { value: 'Beydağ', text: 'Beydağ' }), $('<option>', { value: 'Buca', text: 'Buca' }), $('<option>', { value: 'Konak', text: 'Konak' }), $('<option>', { value: 'Menderes', text: 'Menderes' }), $('<option>', { value: 'Balçova', text: 'Balçova' }), $('<option>', { value: 'Çiğli', text: 'Çiğli' }), $('<option>', { value: 'Gaziemir', text: 'Gaziemir' }), $('<option>', { value: 'Narlıdere', text: 'Narlıdere' }), $('<option>', { value: 'Güzelbahçe', text: 'Güzelbahçe' }), $('<option>', { value: 'Bayraklı', text: 'Bayraklı' }), $('<option>', { value: 'Karabağlar', text: 'Karabağlar' })
+                    );
+                } else if (city == 'Kars') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Arpaçay', text: 'Arpaçay' }), $('<option>', { value: 'Digor', text: 'Digor' }), $('<option>', { value: 'Kağızman', text: 'Kağızman' }), $('<option>', { value: 'Sarıkamış', text: 'Sarıkamış' }), $('<option>', { value: 'Selim', text: 'Selim' }), $('<option>', { value: 'Susuz', text: 'Susuz' }), $('<option>', { value: 'Akyaka', text: 'Akyaka' })
+                    );
+                } else if (city == 'Kastamonu') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Abana', text: 'Abana' }), $('<option>', { value: 'Araç', text: 'Araç' }), $('<option>', { value: 'Azdavay', text: 'Azdavay' }), $('<option>', { value: 'Bozkurt', text: 'Bozkurt' }), $('<option>', { value: 'Cide', text: 'Cide' }), $('<option>', { value: 'Çatalzeytin', text: 'Çatalzeytin' }), $('<option>', { value: 'Daday', text: 'Daday' }), $('<option>', { value: 'Devrekani', text: 'Devrekani' }), $('<option>', { value: 'İnebolu', text: 'İnebolu' }), $('<option>', { value: 'Küre', text: 'Küre' }), $('<option>', { value: 'Taşköprü', text: 'Taşköprü' }), $('<option>', { value: 'Tosya', text: 'Tosya' }), $('<option>', { value: 'İhsangazi', text: 'İhsangazi' }), $('<option>', { value: 'Pınarbaşı', text: 'Pınarbaşı' }), $('<option>', { value: 'Şenpazar', text: 'Şenpazar' }), $('<option>', { value: 'Ağlı', text: 'Ağlı' }), $('<option>', { value: 'Doğanyurt', text: 'Doğanyurt' }), $('<option>', { value: 'Hanönü', text: 'Hanönü' }), $('<option>', { value: 'Seydiler', text: 'Seydiler' })
+                    );
+                } else if (city == 'Kayseri') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Bünyan', text: 'Bünyan' }), $('<option>', { value: 'Develi', text: 'Develi' }), $('<option>', { value: 'Felahiye', text: 'Felahiye' }), $('<option>', { value: 'İncesu', text: 'İncesu' }), $('<option>', { value: 'Pınarbaşı', text: 'Pınarbaşı' }), $('<option>', { value: 'Sarıoğlan', text: 'Sarıoğlan' }), $('<option>', { value: 'Sarız', text: 'Sarız' }), $('<option>', { value: 'Tomarza', text: 'Tomarza' }), $('<option>', { value: 'Yahyalı', text: 'Yahyalı' }), $('<option>', { value: 'Yeşilhisar', text: 'Yeşilhisar' }), $('<option>', { value: 'Akkışla', text: 'Akkışla' }), $('<option>', { value: 'Talas', text: 'Talas' }), $('<option>', { value: 'Kocasinan', text: 'Kocasinan' }), $('<option>', { value: 'Melikgazi', text: 'Melikgazi' }), $('<option>', { value: 'Hacılar', text: 'Hacılar' }), $('<option>', { value: 'Özvatan', text: 'Özvatan' })
+                    );
+                } else if (city == 'Kırklareli') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Babaeski', text: 'Babaeski' }), $('<option>', { value: 'Demirköy', text: 'Demirköy' }), $('<option>', { value: 'Kofçaz', text: 'Kofçaz' }), $('<option>', { value: 'Lüleburgaz', text: 'Lüleburgaz' }), $('<option>', { value: 'Pehlivanköy', text: 'Pehlivanköy' }), $('<option>', { value: 'Pınarhisar', text: 'Pınarhisar' }), $('<option>', { value: 'Vize', text: 'Vize' })
+                    );
+                } else if (city == 'Kırşehir') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Çiçekdağı', text: 'Çiçekdağı' }), $('<option>', { value: 'Kaman', text: 'Kaman' }), $('<option>', { value: 'Mucur', text: 'Mucur' }), $('<option>', { value: 'Akpınar', text: 'Akpınar' }), $('<option>', { value: 'Akçakent', text: 'Akçakent' }), $('<option>', { value: 'Boztepe', text: 'Boztepe' })
+                    );
+                } else if (city == 'Kocaeli') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Gebze', text: 'Gebze' }), $('<option>', { value: 'Gölcük', text: 'Gölcük' }), $('<option>', { value: 'Kandıra', text: 'Kandıra' }), $('<option>', { value: 'Karamürsel', text: 'Karamürsel' }), $('<option>', { value: 'Körfez', text: 'Körfez' }), $('<option>', { value: 'Derince', text: 'Derince' }), $('<option>', { value: 'Başiskele', text: 'Başiskele' }), $('<option>', { value: 'Çayırova', text: 'Çayırova' }), $('<option>', { value: 'Darıca', text: 'Darıca' }), $('<option>', { value: 'Dilovası', text: 'Dilovası' }), $('<option>', { value: 'İzmit', text: 'İzmit' }), $('<option>', { value: 'Kartepe', text: 'Kartepe' })
+                    );
+                } else if (city == 'Konya') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Akşehir', text: 'Akşehir' }), $('<option>', { value: 'Beyşehir', text: 'Beyşehir' }), $('<option>', { value: 'Bozkır', text: 'Bozkır' }), $('<option>', { value: 'Cihanbeyli', text: 'Cihanbeyli' }), $('<option>', { value: 'Çumra', text: 'Çumra' }), $('<option>', { value: 'Doğanhisar', text: 'Doğanhisar' }), $('<option>', { value: 'Ereğli', text: 'Ereğli' }), $('<option>', { value: 'Hadim', text: 'Hadim' }), $('<option>', { value: 'Ilgın', text: 'Ilgın' }), $('<option>', { value: 'Kadınhanı', text: 'Kadınhanı' }), $('<option>', { value: 'Karapınar', text: 'Karapınar' }), $('<option>', { value: 'Kulu', text: 'Kulu' }), $('<option>', { value: 'Sarayönü', text: 'Sarayönü' }), $('<option>', { value: 'Seydişehir', text: 'Seydişehir' }), $('<option>', { value: 'Yunak', text: 'Yunak' }), $('<option>', { value: 'Akören', text: 'Akören' }), $('<option>', { value: 'Altınekin', text: 'Altınekin' }), $('<option>', { value: 'Derebucak', text: 'Derebucak' }), $('<option>', { value: 'Hüyük', text: 'Hüyük' }), $('<option>', { value: 'Karatay', text: 'Karatay' }), $('<option>', { value: 'Meram', text: 'Meram' }), $('<option>', { value: 'Selçuklu', text: 'Selçuklu' }), $('<option>', { value: 'Taşkent', text: 'Taşkent' }), $('<option>', { value: 'Ahırlı', text: 'Ahırlı' }), $('<option>', { value: 'Çeltik', text: 'Çeltik' }), $('<option>', { value: 'Derbent', text: 'Derbent' }), $('<option>', { value: 'Emirgazi', text: 'Emirgazi' }), $('<option>', { value: 'Güneysınır', text: 'Güneysınır' }), $('<option>', { value: 'Halkapınar', text: 'Halkapınar' }), $('<option>', { value: 'Tuzlukçu', text: 'Tuzlukçu' }), $('<option>', { value: 'Yalıhüyük', text: 'Yalıhüyük' })
+                    );
+                } else if (city == 'Kütahya') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Altıntaş', text: 'Altıntaş' }), $('<option>', { value: 'Domaniç', text: 'Domaniç' }), $('<option>', { value: 'Emet', text: 'Emet' }), $('<option>', { value: 'Gediz', text: 'Gediz' }), $('<option>', { value: 'Simav', text: 'Simav' }), $('<option>', { value: 'Tavşanlı', text: 'Tavşanlı' }), $('<option>', { value: 'Aslanapa', text: 'Aslanapa' }), $('<option>', { value: 'Dumlupınar', text: 'Dumlupınar' }), $('<option>', { value: 'Hisarcık', text: 'Hisarcık' }), $('<option>', { value: 'Şaphane', text: 'Şaphane' }), $('<option>', { value: 'Çavdarhisar', text: 'Çavdarhisar' }), $('<option>', { value: 'Pazarlar', text: 'Pazarlar' })
+                    );
+                } else if (city == 'Malatya') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Akçadağ', text: 'Akçadağ' }), $('<option>', { value: 'Arapgir', text: 'Arapgir' }), $('<option>', { value: 'Arguvan', text: 'Arguvan' }), $('<option>', { value: 'Darende', text: 'Darende' }), $('<option>', { value: 'Doğanşehir', text: 'Doğanşehir' }), $('<option>', { value: 'Hekimhan', text: 'Hekimhan' }), $('<option>', { value: 'Pütürge', text: 'Pütürge' }), $('<option>', { value: 'Yeşilyurt', text: 'Yeşilyurt' }), $('<option>', { value: 'Battalgazi', text: 'Battalgazi' }), $('<option>', { value: 'Doğanyol', text: 'Doğanyol' }), $('<option>', { value: 'Kale', text: 'Kale' }), $('<option>', { value: 'Kuluncak', text: 'Kuluncak' }), $('<option>', { value: 'Yazıhan', text: 'Yazıhan' })
+                    );
+                } else if (city == 'Manisa') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Akhisar', text: 'Akhisar' }), $('<option>', { value: 'Alaşehir', text: 'Alaşehir' }), $('<option>', { value: 'Demirci', text: 'Demirci' }), $('<option>', { value: 'Gördes', text: 'Gördes' }), $('<option>', { value: 'Kırkağaç', text: 'Kırkağaç' }), $('<option>', { value: 'Kula', text: 'Kula' }), $('<option>', { value: 'Salihli', text: 'Salihli' }), $('<option>', { value: 'Sarıgöl', text: 'Sarıgöl' }), $('<option>', { value: 'Saruhanlı', text: 'Saruhanlı' }), $('<option>', { value: 'Selendi', text: 'Selendi' }), $('<option>', { value: 'Soma', text: 'Soma' }), $('<option>', { value: 'Şehzadeler', text: 'Şehzadeler' }), $('<option>', { value: 'Yunusemre', text: 'Yunusemre' }), $('<option>', { value: 'Turgutlu', text: 'Turgutlu' }), $('<option>', { value: 'Ahmetli', text: 'Ahmetli' }), $('<option>', { value: 'Gölmarmara', text: 'Gölmarmara' }), $('<option>', { value: 'Köprübaşı', text: 'Köprübaşı' })
+                    );
+                } else if (city == 'Kahramanmaraş') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Afşin', text: 'Afşin' }), $('<option>', { value: 'Andırın', text: 'Andırın' }), $('<option>', { value: 'Dulkadiroğlu', text: 'Dulkadiroğlu' }), $('<option>', { value: 'Onikişubat', text: 'Onikişubat' }), $('<option>', { value: 'Elbistan', text: 'Elbistan' }), $('<option>', { value: 'Göksun', text: 'Göksun' }), $('<option>', { value: 'Pazarcık', text: 'Pazarcık' }), $('<option>', { value: 'Türkoğlu', text: 'Türkoğlu' }), $('<option>', { value: 'Çağlayancerit', text: 'Çağlayancerit' }), $('<option>', { value: 'Ekinözü', text: 'Ekinözü' }), $('<option>', { value: 'Nurhak', text: 'Nurhak' })
+                    );
+                } else if (city == 'Mardin') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Derik', text: 'Derik' }), $('<option>', { value: 'Kızıltepe', text: 'Kızıltepe' }), $('<option>', { value: 'Artuklu', text: 'Artuklu' }), $('<option>', { value: 'Mazıdağı', text: 'Mazıdağı' }), $('<option>', { value: 'Midyat', text: 'Midyat' }), $('<option>', { value: 'Nusaybin', text: 'Nusaybin' }), $('<option>', { value: 'Ömerli', text: 'Ömerli' }), $('<option>', { value: 'Savur', text: 'Savur' }), $('<option>', { value: 'Dargeçit', text: 'Dargeçit' }), $('<option>', { value: 'Yeşilli', text: 'Yeşilli' })
+                    );
+                } else if (city == 'Muğla') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Bodrum', text: 'Bodrum' }), $('<option>', { value: 'Datça', text: 'Datça' }), $('<option>', { value: 'Fethiye', text: 'Fethiye' }), $('<option>', { value: 'Köyceğiz', text: 'Köyceğiz' }), $('<option>', { value: 'Marmaris', text: 'Marmaris' }), $('<option>', { value: 'Menteşe', text: 'Menteşe' }), $('<option>', { value: 'Milas', text: 'Milas' }), $('<option>', { value: 'Ula', text: 'Ula' }), $('<option>', { value: 'Yatağan', text: 'Yatağan' }), $('<option>', { value: 'Dalaman', text: 'Dalaman' }), $('<option>', { value: 'Seydikemer', text: 'Seydikemer' }), $('<option>', { value: 'Ortaca', text: 'Ortaca' }), $('<option>', { value: 'Kavaklıdere', text: 'Kavaklıdere' })
+                    );
+                } else if (city == 'Muş') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Bulanık', text: 'Bulanık' }), $('<option>', { value: 'Malazgirt', text: 'Malazgirt' }), $('<option>', { value: 'Varto', text: 'Varto' }), $('<option>', { value: 'Hasköy', text: 'Hasköy' }), $('<option>', { value: 'Korkut', text: 'Korkut' })
+                    );
+                } else if (city == 'Nevşehir') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Avanos', text: 'Avanos' }), $('<option>', { value: 'Derinkuyu', text: 'Derinkuyu' }), $('<option>', { value: 'Hacıbektaş', text: 'Hacıbektaş' }), $('<option>', { value: 'Kozaklı', text: 'Kozaklı' }), $('<option>', { value: 'Ürgüp', text: 'Ürgüp' }), $('<option>', { value: 'Gülşehir', text: 'Gülşehir' }), $('<option>', { value: 'Acıgöl', text: 'Acıgöl' })
+                    );
+                } else if (city == 'Niğde') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Bor', text: 'Bor' }), $('<option>', { value: 'Çamardı', text: 'Çamardı' }), $('<option>', { value: 'Ulukışla', text: 'Ulukışla' }), $('<option>', { value: 'Altunhisar', text: 'Altunhisar' }), $('<option>', { value: 'Çiftlik', text: 'Çiftlik' }),
+                    );
+                } else if (city == 'Ordu') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Akkuş', text: 'Akkuş' }), $('<option>', { value: 'Altınordu', text: 'Altınordu' }), $('<option>', { value: 'Aybastı', text: 'Aybastı' }), $('<option>', { value: 'Fatsa', text: 'Fatsa' }), $('<option>', { value: 'Gölköy', text: 'Gölköy' }),
+                        $('<option>', { value: 'Korgan', text: 'Korgan' }), $('<option>', { value: 'Kumru', text: 'Kumru' }), $('<option>', { value: 'Mesudiye', text: 'Mesudiye' }), $('<option>', { value: 'Perşembe', text: 'Perşembe' }), $('<option>', { value: 'Ulubey', text: 'Ulubey' }), $('<option>', { value: 'Ünye', text: 'Ünye' }), $('<option>', { value: 'Gülyalı', text: 'Gülyalı' }), $('<option>', { value: 'Gürgentepe', text: 'Gürgentepe' }), $('<option>', { value: 'Çamaş', text: 'Çamaş' }), $('<option>', { value: 'Çatalpınar', text: 'Çatalpınar' }), $('<option>', { value: 'Çaybaşı', text: 'Çaybaşı' }), $('<option>', { value: 'İkizce', text: 'İkizce' }), $('<option>', { value: 'Kabadüz', text: 'Kabadüz' }), $('<option>', { value: 'Kabataş', text: 'Kabataş' })
+                    );
+                } else if (city == 'Rize') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Ardeşen', text: 'Ardeşen' }), $('<option>', { value: 'Çamlıhemşin', text: 'Çamlıhemşin' }), $('<option>', { value: 'Fındıklı', text: 'Fındıklı' }), $('<option>', { value: 'İkizdere', text: 'İkizdere' }), $('<option>', { value: 'Kalkandere', text: 'Kalkandere' }), $('<option>', { value: 'Pazar', text: 'Pazar' }), $('<option>', { value: 'Güneysu', text: 'Güneysu' }), $('<option>', { value: 'Derepazarı', text: 'Derepazarı' }), $('<option>', { value: 'Hemşin', text: 'Hemşin' }), $('<option>', { value: 'İyidere', text: 'İyidere' })
+                    );
+                } else if (city == 'Sakarya') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Akyazı', text: 'Akyazı' }), $('<option>', { value: 'Geyve', text: 'Geyve' }), $('<option>', { value: 'Hendek', text: 'Hendek' }), $('<option>', { value: 'Karasu', text: 'Karasu' }), $('<option>', { value: 'Kaynarca', text: 'Kaynarca' }),
+                        $('<option>', { value: 'Sapanca', text: 'Sapanca' }), $('<option>', { value: 'Kocaali', text: 'Kocaali' }), $('<option>', { value: 'Pamukova', text: 'Pamukova' }), $('<option>', { value: 'Taraklı', text: 'Taraklı' }), $('<option>', { value: 'Ferizli', text: 'Ferizli' }), $('<option>', { value: 'Karapürçek', text: 'Karapürçek' }), $('<option>', { value: 'Söğütlü', text: 'Söğütlü' }), $('<option>', { value: 'Adapazarı', text: 'Adapazarı' }), $('<option>', { value: 'Arifiye', text: 'Arifiye' }), $('<option>', { value: 'Erenler', text: 'Erenler' }), $('<option>', { value: 'Serdivan', text: 'Serdivan' })
+                    );
+                } else if (city == 'Samsun') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Alaçam', text: 'Alaçam' }), $('<option>', { value: 'Bafra', text: 'Bafra' }), $('<option>', { value: 'Çarşamba', text: 'Çarşamba' }), $('<option>', { value: 'Havza', text: 'Havza' }), $('<option>', { value: 'Kavak', text: 'Kavak' }),
+                        $('<option>', { value: 'Ladik', text: 'Ladik' }), $('<option>', { value: 'Terme', text: 'Terme' }), $('<option>', { value: 'Vezirköprü', text: 'Vezirköprü' }), $('<option>', { value: 'Asarcık', text: 'Asarcık' }), $('<option>', { value: 'Ondokuzmayıs', text: 'Ondokuzmayıs' }), $('<option>', { value: 'Salıpazarı', text: 'Salıpazarı' }), $('<option>', { value: 'Tekkeköy', text: 'Tekkeköy' }), $('<option>', { value: 'Ayvacık', text: 'Ayvacık' }), $('<option>', { value: 'Yakakent', text: 'Yakakent' }), $('<option>', { value: 'Atakum', text: 'Atakum' }), $('<option>', { value: 'Canik', text: 'Canik' }), $('<option>', { value: 'İlkadım', text: 'İlkadım' })
+                    );
+                } else if (city == 'Siirt') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Baykan', text: 'Baykan' }), $('<option>', { value: 'Eruh', text: 'Eruh' }), $('<option>', { value: 'Kurtalan', text: 'Kurtalan' }), $('<option>', { value: 'Pervari', text: 'Pervari' }), $('<option>', { value: 'Şirvan', text: 'Şirvan' }),
+                        $('<option>', { value: 'Tillo', text: 'Tillo' })
+                    );
+                } else if (city == 'Sinop') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Ayancık', text: 'Ayancık' }), $('<option>', { value: 'Boyabat', text: 'Boyabat' }), $('<option>', { value: 'Durağan', text: 'Durağan' }), $('<option>', { value: 'Erfelek', text: 'Erfelek' }), $('<option>', { value: 'Gerze', text: 'Gerze' }),
+                        $('<option>', { value: 'Türkeli', text: 'Türkeli' }), $('<option>', { value: 'Dikmen', text: 'Dikmen' }), $('<option>', { value: 'Saraydüzü', text: 'Saraydüzü' })
+                    );
+                } else if (city == 'Sivas') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Divriği', text: 'Divriği' }), $('<option>', { value: 'Gemerek', text: 'Gemerek' }), $('<option>', { value: 'Gürün', text: 'Gürün' }), $('<option>', { value: 'Hafik', text: 'Hafik' }), $('<option>', { value: 'İmranlı', text: 'İmranlı' }),
+                        $('<option>', { value: 'Kangal', text: 'Kangal' }), $('<option>', { value: 'Koyulhisar', text: 'Koyulhisar' }), $('<option>', { value: 'Suşehri', text: 'Suşehri' }), $('<option>', { value: 'Şarkışla', text: 'Şarkışla' }), $('<option>', { value: 'Yıldızeli', text: 'Yıldızeli' }), $('<option>', { value: 'Zara', text: 'Zara' }), $('<option>', { value: 'Akıncılar', text: 'Akıncılar' }), $('<option>', { value: 'Altınyayla', text: 'Altınyayla' }), $('<option>', { value: 'Doğanşar', text: 'Doğanşar' }), $('<option>', { value: 'Gölova', text: 'Gölova' }), $('<option>', { value: 'Ulaş', text: 'Ulaş' })
+                    );
+                } else if (city == 'Tekirdağ') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Çerkezköy', text: 'Çerkezköy' }), $('<option>', { value: 'Çorlu', text: 'Çorlu' }), $('<option>', { value: 'Ergene', text: 'Ergene' }), $('<option>', { value: 'Hayrabolu', text: 'Hayrabolu' }), $('<option>', { value: 'Malkara', text: 'Malkara' }),
+                        $('<option>', { value: 'Muratlı', text: 'Muratlı' }), $('<option>', { value: 'Saray', text: 'Saray' }), $('<option>', { value: 'Süleymanpaşa', text: 'Süleymanpaşa' }), $('<option>', { value: 'Kapaklı', text: 'Kapaklı' }), $('<option>', { value: 'Şarköy', text: 'Şarköy' }), $('<option>', { value: 'Marmaraereğlisi', text: 'Marmaraereğlisi' })
+                    );
+                } else if (city == 'Tokat') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Almus', text: 'Almus' }), $('<option>', { value: 'Artova', text: 'Artova' }), $('<option>', { value: 'Erbaa', text: 'Erbaa' }), $('<option>', { value: 'Niksar', text: 'Niksar' }), $('<option>', { value: 'Reşadiye', text: 'Reşadiye' }),
+                        $('<option>', { value: 'Turhal', text: 'Turhal' }), $('<option>', { value: 'Zile', text: 'Zile' }), $('<option>', { value: 'Pazar', text: 'Pazar' }), $('<option>', { value: 'Yeşilyurt', text: 'Yeşilyurt' }), $('<option>', { value: 'Başçiftlik', text: 'Başçiftlik' }), $('<option>', { value: 'Sulusaray', text: 'Sulusaray' })
+                    );
+                } else if (city == 'Trabzon') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Akçaabat', text: 'Akçaabat' }), $('<option>', { value: 'Araklı', text: 'Araklı' }), $('<option>', { value: 'Arsin', text: 'Arsin' }), $('<option>', { value: 'Çaykara', text: 'Çaykara' }), $('<option>', { value: 'Maçka', text: 'Maçka' }),
+                        $('<option>', { value: 'Of', text: 'Of' }), $('<option>', { value: 'Ortahisar', text: 'Ortahisar' }), $('<option>', { value: 'Sürmene', text: 'Sürmene' }), $('<option>', { value: 'Tonya', text: 'Tonya' }), $('<option>', { value: 'Vakfıkebir', text: 'Vakfıkebir' }), $('<option>', { value: 'Yomra', text: 'Yomra' }), $('<option>', { value: 'Beşikdüzü', text: 'Beşikdüzü' }), $('<option>', { value: 'Şalpazarı', text: 'Şalpazarı' }), $('<option>', { value: 'Çarşıbaşı', text: 'Çarşıbaşı' }), $('<option>', { value: 'Dernekpazarı', text: 'Dernekpazarı' }), $('<option>', { value: 'Düzköy', text: 'Düzköy' }), $('<option>', { value: 'Hayrat', text: 'Hayrat' }), $('<option>', { value: 'Köprübaşı', text: 'Köprübaşı' })
+                    );
+                } else if (city == 'Tunceli') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Çemişgezek', text: 'Çemişgezek' }), $('<option>', { value: 'Hozat', text: 'Hozat' }), $('<option>', { value: 'Mazgirt', text: 'Mazgirt' }), $('<option>', { value: 'Nazımiye', text: 'Nazımiye' }), $('<option>', { value: 'Ovacık', text: 'Ovacık' }),
+                        $('<option>', { value: 'Pertek', text: 'Pertek' }), $('<option>', { value: 'Pülümür', text: 'Pülümür' })
+                    );
+                } else if (city == 'Şanlıurfa') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Akçakale', text: 'Akçakale' }), $('<option>', { value: 'Birecik', text: 'Birecik' }), $('<option>', { value: 'Bozova', text: 'Bozova' }), $('<option>', { value: 'Ceylanpınar', text: 'Ceylanpınar' }), $('<option>', { value: 'Eyyübiye', text: 'Eyyübiye' }),
+                        $('<option>', { value: 'Halfeti', text: 'Halfeti' }), $('<option>', { value: 'Haliliye', text: 'Haliliye' }), $('<option>', { value: 'Hilvan', text: 'Hilvan' }), $('<option>', { value: 'Karaköprü', text: 'Karaköprü' }), $('<option>', { value: 'Siverek', text: 'Siverek' }), $('<option>', { value: 'Suruç', text: 'Suruç' }), $('<option>', { value: 'Viranşehir', text: 'Viranşehir' }), $('<option>', { value: 'Harran', text: 'Harran' })
+                    );
+                } else if (city == 'Uşak') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Banaz', text: 'Banaz' }), $('<option>', { value: 'Eşme', text: 'Eşme' }), $('<option>', { value: 'Karahallı', text: 'Karahallı' }), $('<option>', { value: 'Sivaslı', text: 'Sivaslı' }), $('<option>', { value: 'Ulubey', text: 'Ulubey' })
+                    );
+                } else if (city == 'Van') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Başkale', text: 'Başkale' }), $('<option>', { value: 'Çatak', text: 'Çatak' }), $('<option>', { value: 'Erciş', text: 'Erciş' }), $('<option>', { value: 'Gevaş', text: 'Gevaş' }), $('<option>', { value: 'Gürpınar', text: 'Gürpınar' }),
+                        $('<option>', { value: 'İpekyolu', text: 'İpekyolu' }), $('<option>', { value: 'Muradiye', text: 'Muradiye' }), $('<option>', { value: 'Özalp', text: 'Özalp' }), $('<option>', { value: 'Tuşba', text: 'Tuşba' }), $('<option>', { value: 'Bahçesaray', text: 'Bahçesaray' }), $('<option>', { value: 'Çaldıran', text: 'Çaldıran' }), $('<option>', { value: 'Edremit', text: 'Edremit' }), $('<option>', { value: 'Saray', text: 'Saray' })
+                    );
+                } else if (city == 'Yozgat') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Akdağmadeni', text: 'Akdağmadeni' }), $('<option>', { value: 'Boğazlıyan', text: 'Boğazlıyan' }), $('<option>', { value: 'Çayıralan', text: 'Çayıralan' }), $('<option>', { value: 'Çekerek', text: 'Çekerek' }), $('<option>', { value: 'Sarıkaya', text: 'Sarıkaya' }), $('<option>', { value: 'Sorgun', text: 'Sorgun' }), $('<option>', { value: 'Şefaatli', text: 'Şefaatli' }), $('<option>', { value: 'Yerköy', text: 'Yerköy' }), $('<option>', { value: 'Aydıncık', text: 'Aydıncık' }), $('<option>', { value: 'Çandır', text: 'Çandır' }), $('<option>', { value: 'Kadışehri', text: 'Kadışehri' }), $('<option>', { value: 'Saraykent', text: 'Saraykent' }), $('<option>', { value: 'Yenifakılı', text: 'Yenifakılı' })
+                    );
+                } else if (city == 'Zonguldak') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Çaycuma', text: 'Çaycuma' }), $('<option>', { value: 'Devrek', text: 'Devrek' }), $('<option>', { value: 'Ereğli', text: 'Ereğli' }), $('<option>', { value: 'Alaplı', text: 'Alaplı' }), $('<option>', { value: 'Gökçebey', text: 'Gökçebey' })
+                    );
+                } else if (city == 'Aksaray') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Ağaçören', text: 'Ağaçören' }), $('<option>', { value: 'Eskil', text: 'Eskil' }), $('<option>', { value: 'Gülağaç', text: 'Gülağaç' }), $('<option>', { value: 'Güzelyurt', text: 'Güzelyurt' }), $('<option>', { value: 'Ortaköy', text: 'Ortaköy' }), $('<option>', { value: 'Sarıyahşi', text: 'Sarıyahşi' })
+                    );
+                } else if (city == 'Bayburt') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Aydıntepe', text: 'Aydıntepe' }), $('<option>', { value: 'Demirözü', text: 'Demirözü' })
+                    );
+                } else if (city == 'Karaman') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Ermenek', text: 'Ermenek' }), $('<option>', { value: 'Ayrancı', text: 'Ayrancı' }), $('<option>', { value: 'Kazımkarabekir', text: 'Kazımkarabekir' }), $('<option>', { value: 'Başyayla', text: 'Başyayla' }), $('<option>', { value: 'Sarıveliler', text: 'Sarıveliler' })
+                    );
+                } else if (city == 'Kırıkkale') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Delice', text: 'Delice' }), $('<option>', { value: 'Keskin', text: 'Keskin' }), $('<option>', { value: 'Sulakyurt', text: 'Sulakyurt' }), $('<option>', { value: 'Bahşili', text: 'Bahşili' }), $('<option>', { value: 'Balışeyh', text: 'Balışeyh' }), $('<option>', { value: 'Çelebi', text: 'Çelebi' }), $('<option>', { value: 'Karakeçili', text: 'Karakeçili' }), $('<option>', { value: 'Yahşihan', text: 'Yahşihan' })
+                    );
+                } else if (city == 'Batman') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Beşiri', text: 'Beşiri' }), $('<option>', { value: 'Gercüş', text: 'Gercüş' }), $('<option>', { value: 'Kozluk', text: 'Kozluk' }), $('<option>', { value: 'Sason', text: 'Sason' }), $('<option>', { value: 'Hasankeyf', text: 'Hasankeyf' })
+                    );
+                } else if (city == 'Şırnak') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Beytüşşebap', text: 'Beytüşşebap' }), $('<option>', { value: 'Cizre', text: 'Cizre' }), $('<option>', { value: 'İdil', text: 'İdil' }), $('<option>', { value: 'Silopi', text: 'Silopi' }), $('<option>', { value: 'Uludere', text: 'Uludere' }), $('<option>', { value: 'Güçlükonak', text: 'Güçlükonak' })
+                    );
+                } else if (city == 'Bartın') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Kurucaşile', text: 'Kurucaşile' }), $('<option>', { value: 'Ulus', text: 'Ulus' }), $('<option>', { value: 'Amasra', text: 'Amasra' })
+                    );
+                } else if (city == 'Ardahan') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Çıldır', text: 'Çıldır' }), $('<option>', { value: 'Göle', text: 'Göle' }), $('<option>', { value: 'Hanak', text: 'Hanak' }), $('<option>', { value: 'Posof', text: 'Posof' }), $('<option>', { value: 'Damal', text: 'Damal' })
+                    );
+                } else if (city == 'Iğdır') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Aralık', text: 'Aralık' }), $('<option>', { value: 'Tuzluca', text: 'Tuzluca' }), $('<option>', { value: 'Karakoyunlu', text: 'Karakoyunlu' })
+                    );
+                } else if (city == 'Yalova') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Altınova', text: 'Altınova' }), $('<option>', { value: 'Armutlu', text: 'Armutlu' }), $('<option>', { value: 'Çınarcık', text: 'Çınarcık' }), $('<option>', { value: 'Çiftlikköy', text: 'Çiftlikköy' }), $('<option>', { value: 'Termal', text: 'Termal' })
+                    );
+                } else if (city == 'Karabük') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Eflani', text: 'Eflani' }), $('<option>', { value: 'Eskipazar', text: 'Eskipazar' }), $('<option>', { value: 'Ovacık', text: 'Ovacık' }), $('<option>', { value: 'Safranbolu', text: 'Safranbolu' }), $('<option>', { value: 'Yenice', text: 'Yenice' })
+                    );
+                } else if (city == 'Kilis') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Elbeyli', text: 'Elbeyli' }), $('<option>', { value: 'Musabeyli', text: 'Musabeyli' }), $('<option>', { value: 'Polateli', text: 'Polateli' })
+                    );
+                } else if (city == 'Osmaniye') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Bahçe', text: 'Bahçe' }), $('<option>', { value: 'Kadirli', text: 'Kadirli' }), $('<option>', { value: 'Düziçi', text: 'Düziçi' }), $('<option>', { value: 'Hasanbeyli', text: 'Hasanbeyli' }), $('<option>', { value: 'Sumbas', text: 'Sumbas' }), $('<option>', { value: 'Toprakkale', text: 'Toprakkale' })
+                    );
+                } else if (city == 'Düzce') {
+                    $('#district').html('');
+                    $('#district').append($('<option>', { value: 'Merkez', text: 'Merkez' }),
+                        $('<option>', { value: 'Akçakoca', text: 'Akçakoca' }), $('<option>', { value: 'Yığılca', text: 'Yığılca' }), $('<option>', { value: 'Cumayeri', text: 'Cumayeri' }), $('<option>', { value: 'Gölyaka', text: 'Gölyaka' }), $('<option>', { value: 'Çilimli', text: 'Çilimli' }), $('<option>', { value: 'Gümüşova', text: 'Gümüşova' }), $('<option>', { value: 'Kaynaşlı', text: 'Kaynaşlı' })
+                    );
+                }
+
+            });
+        </script>
+    }*@

@@ -1,0 +1,202 @@
+﻿@using Entities.Concrete
+@model GoldistUI.Models.Account.LoginViewModel
+
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--<head>
+    <title>COSAR</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+<!--<link rel="icon" type="image/png" href="images/icons/favicon.ico" />-->
+<!--===============================================================================================-->
+<!--<link href="~/Template/Login/vendor/bootstrap/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css" />-->
+<!--===============================================================================================-->
+<!--<link href="~/Template/Login/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />-->
+<!--===============================================================================================-->
+<!--<link href="~/Template/Login/fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css" />-->
+<!--===============================================================================================-->
+<!--<link href="~/Template/Login/vendor/animate/animate.css" rel="stylesheet" type="text/css" />-->
+<!--===============================================================================================-->
+<!--<link href="~/Template/Login/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" type="text/css" />-->
+<!--===============================================================================================-->
+<!--<link href="~/Template/Login/vendor/animsition/css/animsition.min.css" rel="stylesheet" type="text/css" />-->
+<!--===============================================================================================-->
+<!--<link href="~/Template/Login/vendor/select2/select2.min.css" rel="stylesheet" type="text/css" />-->
+<!--===============================================================================================-->
+<!--<link href="~/Template/Login/vendor/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />-->
+<!--===============================================================================================-->
+<!--<link href="~/Template/Login/css/util.css" rel="stylesheet" type="text/css" />
+    <link href="~/Template/Login/css/main.css" rel="stylesheet" type="text/css" />
+
+</head>-->
+<style type="text/css">
+    .validation-summary-errors {
+        border: 1px dotted #f5fffa;
+        background-color: #ff9600;
+        border-radius: 6px;
+        
+    }
+</style>
+<div class="container" style="-webkit-box-shadow:none;margin-top:5px">
+    <div id="breadcrumb">
+        <ol class="breadcrumb" style="margin-top:10px">
+            <li><a class="colorbrdcrmp" asp-action="Index" asp-controller="Home">Ana Sayfa</a></li>
+
+            <li><a class="colorbrdcrmp" href="">Giriş</a></li>
+            @*<li><a asp-action="Gemstone2" asp-controller="UrunMamul" asp-route-id="@Url.SeoFriendlyUrl(Model.Urunmamul.TUR)" asp-route-altKategori="@Url.SeoFriendlyUrl(Model.Urunmamul.GRUP11)">@Model.Urunmamul.GRUP11</a></li>*@
+            @*<li>@Model.Urunmamul.WEB1_ACIKLAMA</li>*@
+        </ol>
+    </div>
+</div>
+<div class="container bordernot" style="-webkit-box-shadow:none;padding:50px;margin-top:-10px;margin:auto;">
+    <div class="row">
+        <div class="col-sm-6">
+
+
+            <div class="form-group offset-sm-1" style="-webkit-box-shadow:none">
+                <span style="border:none;font-size:20px">
+                    <b>Üye Girişi</b>
+                </span>
+
+                @if (TempData["error"] != null)
+                {
+                    <div class="validation-summary-errors text-center" role="alert" style="color: red;background-color: #F6B6AB"><b>@TempData["error"]</b></div>
+                }
+                @if (TempData["shoppingComplete"] != null)
+                {
+                    <div class="validation-summary-errors" role="alert" style="color: red;background-color: #F6B6AB">@TempData["shoppingComplete"]</div>
+                }
+                @if (TempData["IfSuccessfull"] != null)
+                {
+                    <div class="validation-summary-errors" role="alert" style="color: red;background-color: #F6B6AB">@TempData["IfSuccessfull"]</div>
+                }
+                <form method="post" role="form">
+                    <div class="form-group mt-3">
+
+                        <label>E-Posta*</label>
+                        <input type="email" class="form-control" name="Email" placeholder="e-posta adresiniz" style="border:0.25px solid #959595" required oninput="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Lütfen bu alanı doldurunuz.')" />
+                        @*@Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "şifreniz", type = "Email", style = "border:1px solid #black !importent", required = "required" })*@
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+                    </div>
+                    
+
+                    <div class="form-group">
+                        <div class="form-group ms-3">
+                            <label>Şifre*</label>
+                            <input type="password" id="password"  class="form-control" name="Password" placeholder="şifreniz" style="border:0.25px solid #959595" required oninput="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Lütfen bu alanı doldurunuz.')" />
+                            <i  style="margin-left:520px" class="fa fa-eye" onclick="Password()"> </i>
+                        </div>
+                      
+                            @*@Html.TextBoxFor(model => model.Password, new { @class = "form-control", placeholder = "şifreniz", type = "password", required= "required" })*@
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                           
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <a style="color:black;font-size:13px" href="sayfa-uyelik-sozlesmesi">Oturum açık kalsın</a>
+                                <input type="checkbox" name="emailsozlesme" id="emailsozlesme" value="true">
+
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="mblsifreforgot" style="text-align:right;color:#292929; text-decoration: underline; position:static;float:unset; margin:0 6.5% 0 0;font-size:13px;margin-top:3px;margin-bottom:3px; "> @Html.ActionLink("Şifremi Unuttum", "ForgotThePassword", "Account")</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top:50px">
+                            <button id="btnLogin" class="btn" style="font-size:15px;color: white; background-color:red; box-shadow: none !important; width: 100%; border-radius: 0; border-color: #F6B6AB">
+                                Giriş Yap
+                            </button>
+                        </div>
+</form>
+            </div>
+
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group offset-sm-2" style="-webkit-box-shadow:none">
+                <span style="border:none;font-size:20px" id="uye">
+                    <b>Üye Ol</b>
+                </span>
+
+
+                <div class="form-group mt-4" id="uye1">
+
+                    <b style="line-height: 2;">Şimdi üye ol; sana özel ayrıcalıkları hemen yakala!</b>
+                    <p style="padding:10px;background-color:#f7f7f7;margin-top:15px;  line-height: 2;">
+                        Siparişlerinizin durumunu takip edebilir, üyelerimize özel
+                        kampanya ve indirimlerden yararlanabilirsiniz. Ayrıca indirim,
+                        yeni sezon ürünleri ve kampanyalardan e-bülten yoluyla
+                        öncelikli olarak haberdar olabilirsiniz.
+                    </p>
+
+
+                </div>
+                <div class="form-group">
+                    <a id="" asp-action="Register" asp-controller="Account" class="btn" style="font-size: 15px;color:white;margin-top:18px; background-color:red; box-shadow: none !important; width: 100%; border-radius: 0; border-color: #F6B6AB">
+                        Hemen Üye Ol
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section js{
+    <script>
+        $(document).ready(function () {
+            if ($(window).width() <= 426) {
+                $("#uye").css("display", "none");
+                $("#uye1").css("display", "none");
+            }
+        })
+    </script>
+}
+<script>
+    function Password() {
+        var element = document.getElementById("password");
+        element.type = element.type == "password" ? "text" : "password";
+    }
+</script>
+
+@*<script src="~/Template/Login/vendor/jquery/jquery-3.2.1.min.js"></script>*@
+
+@*<script>
+
+    $("#btnLogin").click(function () {
+    var degerler = {
+    email: $("#emailAdres").val(),
+    password: $("#password").val()
+    };
+    $.ajax({
+    type: 'POST',
+    url: '/Account/LoginControl',
+    data: JSON.stringify(degerler),
+    dataType: 'JSON',
+    contentType: "application/json;charset=utf-8",
+    success: function (gelenDeg) {
+    if (gelenDeg === "1") {
+    alert("Giriş Başarılı! Yönlendiriliyorsunuz..");
+    setTimeout(function () { window.location.href = '/Home/Index' }, 2000);
+    }
+    else if (gelenDeg === "2") {
+    alert("Kullanıcı adı yada şifre alanı boş olamaz!");
+    }
+    else if (gelenDeg === "0") {
+    alert("Kullanıcı adı yada şifre hatalı!");
+    email: $("#emailAdres").val("");
+    password: $("#password").val("");
+    }
+    },
+    error: function () {
+    alert("Bir hata oluştu");
+    email: $("#emailAdres").text("");
+    password: $("#password").text("");
+    }
+    });
+    });
+    </script>*@
